@@ -6,6 +6,9 @@ import (
 	"net/http"
 )
 
+// HandlerFunc 提供处理函数模板
+type HandlerFunc func(*Context)
+
 type Context struct {
 	resp http.ResponseWriter
 	req  *http.Request
