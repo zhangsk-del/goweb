@@ -2,6 +2,7 @@ package gweb
 
 import (
 	"fmt"
+	"go-web/context"
 	"net/http"
 )
 
@@ -13,7 +14,7 @@ type EngineInterface interface {
 }
 
 // HandlerFunc 提供处理函数模板
-type HandlerFunc func(http.ResponseWriter, *http.Request)
+type HandlerFunc func(*context.Context)
 
 // Engine 实现 Handler ServerHttp
 type Engine struct {
@@ -50,9 +51,9 @@ func (engine *Engine) Run(addr string) error {
 func (engine *Engine) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 
 	key := req.Method + "-" + req.URL.Path
-
 	if handler, ok := engine.router[key]; ok {
-		handler(resp, req)
+		c := context.NewContext(resp, req)
+		handler(c)
 	} else {
 		resp.WriteHeader(http.StatusNotFound)
 		fmt.Fprintf(resp, "404 NOT FOUND: %s\n", req.URL)
