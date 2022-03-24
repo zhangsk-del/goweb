@@ -1,7 +1,7 @@
 package go_web
 
 import (
-	"fmt"
+	"go-web/context"
 	"go-web/gweb"
 	"net/http"
 	"testing"
@@ -10,9 +10,24 @@ import (
 func TestWeb(t *testing.T) {
 	engine := gweb.New()
 
-	engine.Get("/", func(resp http.ResponseWriter, req *http.Request) {
+	engine.Get("/", func(c *context.Context) {
+		c.String(200, "URL.Path = %q\n", c.Path)
 
-		fmt.Fprintf(resp, "URL.Path = %q\n", req.URL.Path)
+		// fmt.Fprintf(resp, "URL.Path = %q\n", req.URL.Path)
+	})
+
+	engine.Get("/login", func(c *context.Context) {
+		res := make(map[string]string)
+		res["username"] = "gweb"
+		res["password"] = "123"
+		c.JSON(http.StatusOK, res)
+	})
+
+	engine.Post("/login", func(c *context.Context) {
+		res := make(map[string]string)
+		res["username"] = "gweb"
+		res["password"] = "123"
+		c.JSON(http.StatusOK, res)
 	})
 
 	engine.Run(":8080")
