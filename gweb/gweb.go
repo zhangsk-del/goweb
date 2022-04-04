@@ -2,6 +2,7 @@ package gweb
 
 import (
 	"go-web/context"
+	"go-web/middle"
 	"go-web/router"
 	"log"
 	"net/http"
@@ -29,6 +30,17 @@ func New() EngineInterface {
 	engine.RouterGroup = &RouterGroup{
 		engine: engine,
 	}
+	engine.groups = []*RouterGroup{engine.RouterGroup}
+	return engine
+}
+
+//  NewDefault 是获取Engine的默认构造函数
+func NewDefault() EngineInterface {
+	engine := &Engine{router: router.NewRouter()}
+	engine.RouterGroup = &RouterGroup{
+		engine: engine,
+	}
+	engine.Use(middle.Logger())
 	engine.groups = []*RouterGroup{engine.RouterGroup}
 	return engine
 }
