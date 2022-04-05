@@ -40,7 +40,7 @@ func NewDefault() EngineInterface {
 	engine.RouterGroup = &RouterGroup{
 		engine: engine,
 	}
-	engine.Use(middle.Logger())
+	engine.Use(middle.Logger(), middle.Recovery())
 	engine.groups = []*RouterGroup{engine.RouterGroup}
 	return engine
 }

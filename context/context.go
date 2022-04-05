@@ -85,3 +85,7 @@ func (c *Context) Next() {
 		c.Handlers[c.index](c)
 	}
 }
+func (c *Context) Fail(code int, err string) {
+	c.index = len(c.Handlers)
+	c.JSON(code, "message:", err)
+}
