@@ -2,7 +2,8 @@ package gee
 
 import "strings"
 
-// node这里实现了一个简单路由  todo 待实现动态路由匹配逻辑
+// node 这里实现了一个简单路由
+// todo 待实现动态路由匹配逻辑
 type node struct {
 	pattern  string  // 待匹配路由
 	part     string  // 路由中的一部分
@@ -10,7 +11,7 @@ type node struct {
 	isWild   bool    // 是否精确匹配
 }
 
-// 第一个匹配成功的节点，用于插入
+// matchChild 第一个匹配成功的节点，用于插入
 func (n *node) matchChild(part string) *node {
 	for _, child := range n.children {
 		if child.part == part || child.isWild {
@@ -20,7 +21,7 @@ func (n *node) matchChild(part string) *node {
 	return nil
 }
 
-// 所有匹配成功的节点，用于查找
+// matchChildren 所有匹配成功的节点，用于查找
 func (n *node) matchChildren(part string) []*node {
 	nodes := make([]*node, 0)
 	for _, child := range n.children {
