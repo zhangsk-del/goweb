@@ -8,24 +8,14 @@ import (
 type HandlerFunc func(ctx *Context)
 
 type Engine struct {
-	router *router
+	*RouterGroup
 }
 
 // NewEngine 初始化引擎
 func NewEngine() *Engine {
-	return &Engine{
-		router: newRouter(),
-	}
-}
-
-// Post 提供对外的Post方法
-func (e *Engine) Post(addr string, handler HandlerFunc) {
-	e.router.addRouter("POST", addr, handler)
-}
-
-// Get 提供对外的Get方法
-func (e *Engine) Get(addr string, handler HandlerFunc) {
-	e.router.addRouter("GET", addr, handler)
+	engine := &Engine{}
+	engine.RouterGroup = NewRouterGroup(engine)
+	return engine
 }
 
 // Run 启动一个httpServer
