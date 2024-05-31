@@ -1,6 +1,7 @@
 package gee
 
 import (
+	"log"
 	"net/http"
 	"strings"
 )
@@ -30,6 +31,7 @@ func NewEngineDefault() *Engine {
 
 // Run 启动一个httpServer
 func (e *Engine) Run(addr string) {
+	log.Printf("Listen And Serve%s", addr)
 	http.ListenAndServe(addr, e)
 }
 
@@ -43,7 +45,17 @@ func (e *Engine) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	ctx := newContext(w, r)
-	ctx.handlers = middlewares
-	e.router.handle(ctx)
+	c := newContext(w, r)
+	c.handlers = middlewares
+
+	handler := e.router.getRouter(e.router.getKey(c.Method, c.Path))
+
+	if handler != nil {
+		c.handlers = append(c.handlers, handler)
+	} else {
+		c.handlers = append(c.handlers, func(ctx *Context) {
+			c.String(http.StatusNotFound, "404 NOT FOUND: %s\n", c.Path)
+		})
+	}
+	c.Next()
 }
