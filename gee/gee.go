@@ -21,6 +21,13 @@ func NewEngine() *Engine {
 	return engine
 }
 
+// NewEngineDefault 初始化一个默认的引擎
+func NewEngineDefault() *Engine {
+	engine := NewEngine()
+	engine.Use(Logger(), Recovery())
+	return engine
+}
+
 // Run 启动一个httpServer
 func (e *Engine) Run(addr string) {
 	http.ListenAndServe(addr, e)
