@@ -3,6 +3,15 @@
 
 ## 使用demo
 ```
+package main
+
+import (
+	"fmt"
+	"goweb/gee"
+)
+
+func main() {
+
 	engine := gee.NewEngine()
 	engine.Use(gee.Logger(), gee.Recovery())
 
@@ -34,4 +43,6 @@
 	}
 
 	engine.Run(":8000")
+}
+
 ```
